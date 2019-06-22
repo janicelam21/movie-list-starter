@@ -1,4 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import App from './components/App.jsx';
+import movies from "./data/examplemovies.js"
 
-ReactDOM.render(<div>Hello, World</div>, document.getElementById('app'));
+
+ReactDOM.render(<App movies = {movies}/>, document.getElementById('app'));
