@@ -7,6 +7,7 @@ class Toggle extends React.Component {
   }
 
   handletoggle() {
+    console.log('this is what was getting matched',this.props.title)
     this.props.handleToggle(this.props.title)
   }
 

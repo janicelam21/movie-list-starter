@@ -5,6 +5,7 @@ import SeeAll from './SeeAll.jsx'
 import AddMovies from './AddMovies.jsx'
 import Watched from './Watched.jsx'
 import Unwatched from './Unwatched.jsx'
+import SearchDatabase from '../lib/searchTMDB.js'
 
 
 class App extends React.Component {
@@ -34,7 +35,6 @@ class App extends React.Component {
         searchMatches.push(this.props.movies[i])
       }
     }
-
     this.setState({allMovies: searchMatches})
   }
 
@@ -75,10 +75,12 @@ class App extends React.Component {
   handleToggle(title) {
     for (var i = 0; i<this.props.movies.length; i++) {
       if (this.props.movies[i].title === title) {
+        console.log('we got a match')
         var newtf = !this.props.movies[i].tf
         Object.assign(this.props.movies[i],{tf:newtf})
       }
     }
+    console.log('this is from toggle', this.props.movies)
     this.setState({allMovies:this.props.movies})
   }
 

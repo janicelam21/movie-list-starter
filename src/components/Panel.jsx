@@ -2,12 +2,11 @@ import React from 'react';
 import Toggle from './Toggle.jsx'
 
 const Panel = (props) => {
-  console.log(props)
+  console.log('this is from panel:',props)
   return (
     <div className = "panel">
-      <p>Runtime: {props.info.Runtime}</p>
-      <p>Metascore: {props.info.Metascore}</p>
-      <p>imdb Rating: {props.info.imdbRating}</p>
+      <p>Popularity: {props.popularity}</p>
+      <p>Release Date: {props.releaseDate}</p>
       <Toggle tf = {props.tf} handleToggle = {props.handleToggle} title = {props.title}/>
     </div>
   )
