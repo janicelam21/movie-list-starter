@@ -5,14 +5,14 @@ import SeeAll from './SeeAll.jsx'
 import AddMovies from './AddMovies.jsx'
 import Watched from './Watched.jsx'
 import Unwatched from './Unwatched.jsx'
-import SearchDatabase from '../lib/searchTMDB.js'
+import $ from 'jquery'
 
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     
-    var unwatched = [];
+    this.origMovies = '';
     this.toggled = [];
     this.tf = '';
     this.state = {
@@ -26,6 +26,22 @@ class App extends React.Component {
     this.handleWatched = this.handleWatched.bind(this);
     this.handleUnwatched = this.handleUnwatched.bind(this);
     this.handleToggle = this.handleToggle.bind(this);
+  }
+
+  callAPI() {
+    $.ajax({
+      url: "http://localhost:3000/api/movies",
+      type: 'GET',
+      success: (data) => {
+        console.log(data)
+        origMovies = data
+        this.setState({allMovies:data})
+      }
+    })
+  }
+
+  componentDidMount() {
+    this.callAPI();
   }
 
   handleSearch(value) {

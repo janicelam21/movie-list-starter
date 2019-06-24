@@ -18,7 +18,11 @@
   },
   "homepage": "https://github.com/RamKhalsa/movie-list-starter#readme",
   "dependencies": {
+    "ajax": "0.0.4",
+    "express": "^4.17.1",
+    "jquery": "^3.4.1",
     "live-server": "^1.2.1",
+    "mysql": "^2.17.1",
     "react": "^16.8.6",
     "react-dom": "^16.8.6"
   },
