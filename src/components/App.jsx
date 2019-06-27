@@ -6,6 +6,7 @@ import AddMovies from './AddMovies.jsx'
 import Watched from './Watched.jsx'
 import Unwatched from './Unwatched.jsx'
 import $ from 'jquery'
+const axios = require('axios');
 
 
 class App extends React.Component {
@@ -16,8 +17,8 @@ class App extends React.Component {
     this.toggled = [];
     this.tf = '';
     this.state = {
-      allMovies: this.props.movies,
-      tf: '',
+      allMovies: '',
+      tf: ''
     }
 
     this.handleSearch = this.handleSearch.bind(this);
@@ -26,16 +27,21 @@ class App extends React.Component {
     this.handleWatched = this.handleWatched.bind(this);
     this.handleUnwatched = this.handleUnwatched.bind(this);
     this.handleToggle = this.handleToggle.bind(this);
+    this.callAPI = this.callAPI.bind(this);
+    this.addAPI = this.addAPI.bind(this)
   }
 
   callAPI() {
     $.ajax({
-      url: "http://localhost:3000/api/movies",
+      url: '/api/movies',
       type: 'GET',
       success: (data) => {
-        console.log(data)
-        origMovies = data
+        console.log('this is from our server', data)
+        this.origMovies = data
         this.setState({allMovies:data})
+      },
+      error: (error) => {
+        console.log('there has been an error')
       }
     })
   }
@@ -44,11 +50,18 @@ class App extends React.Component {
     this.callAPI();
   }
 
+  addAPI(title) {
+    axios.post('/api/movies',{title: title})
+    .then(res => console.log(res))
+    .catch(err => console.log(err))
+
+  }
+
   handleSearch(value) {
     const searchMatches = [];
-    for (var i = 0; i<this.props.movies.length; i++) {
-      if (this.props.movies[i].title.toUpperCase().includes(value.toUpperCase())){
-        searchMatches.push(this.props.movies[i])
+    for (var i = 0; i<this.origMovies.length; i++) {
+      if (this.origMovies[i].title.toUpperCase().includes(value.toUpperCase())){
+        searchMatches.push(this.origMovies[i])
       }
     }
     this.setState({allMovies: searchMatches})
@@ -56,21 +69,23 @@ class App extends React.Component {
 
 
   handleSeeAll() {
-    this.setState({allMovies:this.props.movies})
+    this.setState({allMovies:this.origMovies})
   }
 
   handleAdd(moviename) {
     event.preventDefault();
-    this.props.movies.push({title:moviename})
-    this.setState({allMovies:this.props.movies})
-  }
+    this.origMovies.push({title:moviename})
+    this.setState((state) => {
+      return {allMovies: this.origMovies}
+    })
+  } // fix this one
 
   handleWatched() {
     event.preventDefault();
     var watched = [];
-    for (var i = 0; i<this.props.movies.length; i++) {
-      if (this.props.movies[i].tf === true) {
-        watched.push(this.props.movies[i])
+    for (var i = 0; i<this.origMovies.length; i++) {
+      if (this.origMovies[i].tf === true) {
+        watched.push(this.origMovies[i])
       }
     }
     this.setState({allMovies:watched})
@@ -79,9 +94,9 @@ class App extends React.Component {
   handleUnwatched() {
     event.preventDefault();
     var unwatched = [];
-    for (var i = 0; i<this.props.movies.length; i++) {
-      if (!this.props.movies[i].tf === true) {
-        unwatched.push(this.props.movies[i])
+    for (var i = 0; i<this.origMovies.length; i++) {
+      if (!this.origMovies[i].tf === true) {
+        unwatched.push(this.origMovies[i])
       }
     }
     this.setState({allMovies:unwatched})
@@ -89,15 +104,15 @@ class App extends React.Component {
   }
 
   handleToggle(title) {
-    for (var i = 0; i<this.props.movies.length; i++) {
-      if (this.props.movies[i].title === title) {
+    for (var i = 0; i<this.origMovies.length; i++) {
+      if (this.origMovies[i].title === title) {
         console.log('we got a match')
-        var newtf = !this.props.movies[i].tf
-        Object.assign(this.props.movies[i],{tf:newtf})
+        var newtf = !this.origMovies[i].tf
+        Object.assign(this.origMovies[i],{tf:newtf})
       }
     }
-    console.log('this is from toggle', this.props.movies)
-    this.setState({allMovies:this.props.movies})
+    // console.log('this is from toggle', this.props.movies)
+    this.setState({allMovies:this.origMovies})
   }
 
   render() {
@@ -105,7 +120,7 @@ class App extends React.Component {
       <div>
         <h1 className = "title">MovieList</h1>
         <SearchBar handleSearch = {this.handleSearch} searchRender = {this.state.searchMovies}/>
-        <AddMovies handleAdd = {this.handleAdd}/>
+        <AddMovies handleAdd = {this.handleAdd} addAPI = {this.addAPI}/>
         <SeeAll seeAll = {this.handleSeeAll}/>
         <br></br>
         <Watched handleWatched = {this.handleWatched}/>

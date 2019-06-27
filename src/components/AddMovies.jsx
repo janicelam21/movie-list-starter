@@ -17,6 +17,7 @@ class AddMovies extends React.Component {
 
   handleClick() {
     this.props.handleAdd(this.state.addVal)
+    this.props.addAPI(this.state.addVal)
   }
 
   render() {

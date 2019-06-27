@@ -1,22 +1,12 @@
 import React from 'react';
-
-// const SearchBar = (props) => {
-//   return (
-//     <form>
-//       <label>Search Movies: </label>
-//       <input type = "text" id = "searchinput" onChange= {}></input>
-//       <button onClick = {props.handleSearch}>SEARCH</button>
-//     </form>
-//   )
-
-// }
-
+import TMDB_API_KEY from '../config/TMDBapi.js';
 
 class SearchBar extends React.Component {
   constructor(props){
     super(props)
     this.state = {
-      search:''
+      search:'',
+      titleresults:''
     }
     this.handleOnChange = this.handleOnChange.bind(this);
     this.handleClick = this.handleClick.bind(this);
@@ -24,6 +14,14 @@ class SearchBar extends React.Component {
 
   handleOnChange(event) {
     this.setState({search: event.target.value})
+    fetch('https://api.themoviedb.org/3/search/movie?api_key='+ TMDB_API_KEY + '&query=' + event.target.value)
+      .then(res=>res.json())
+      .then(search => this.parseData(search))
+      .catch(error = console.log(error))
+  }
+
+  parseData(search) {
+    // this.setState({titleresults:search.original_title})
   }
 
   handleClick(){

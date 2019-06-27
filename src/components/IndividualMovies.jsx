@@ -11,6 +11,7 @@ class IndivMovies extends React.Component {
       clicked: false, 
       popularity: '',
       releaseDate: '',
+      posterPath:''
     }
     this.handleRequest = this.handleRequest.bind(this);
     this.parseMovieData = this.parseMovieData.bind(this)
@@ -53,6 +54,7 @@ class IndivMovies extends React.Component {
     const results = data.results[0];
     this.setState({popularity: results.popularity});
     this.setState({releaseDate: results.release_date});
+    this.setState({posterPath: results.poster_path});
   }
 
 
@@ -61,7 +63,7 @@ class IndivMovies extends React.Component {
     return (
       <div className = "indiv" >
         <div> <a href ='#' onClick = {this.handleClick}>{this.props.movies.title}</a>
-        {this.state.clicked ? <Panel popularity = {this.state.popularity} releaseDate = {this.state.releaseDate} handleToggle = {this.props.handleToggle} tf = {this.props.movies.tf} title = {this.props.movies.title}/> : null}
+        {this.state.clicked ? <Panel posterPath = {this.state.posterPath} popularity = {this.state.popularity} releaseDate = {this.state.releaseDate} handleToggle = {this.props.handleToggle} tf = {this.props.movies.tf} title = {this.props.movies.title}/> : null}
         </div>
       </div>
     )
